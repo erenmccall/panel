@@ -10,25 +10,29 @@
     padding: 0;
     font-family: 'Consolas', monospace;
     color: #00ff99;
-    background: url('https://i.gifer.com/7VQh.gif') no-repeat center center fixed;
+    background: url('https://i.gifer.com/VgX.gif') no-repeat center center fixed;
     background-size: cover;
     display: flex;
     height: 100vh;
+    overflow: hidden;
   }
 
   /* Sol Menü */
   .sidebar {
     width: 220px;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.85);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 20px 10px;
+    box-shadow: 2px 0 10px #00ff99;
+    transition: background 0.5s ease;
   }
 
   .menu {
     display: flex;
     flex-direction: column;
+    animation: fadeIn 0.8s ease;
   }
 
   .menu button {
@@ -40,12 +44,19 @@
     font-size: 15px;
     border-radius: 6px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s ease;
   }
 
-  .menu button:hover, .menu button.active {
+  .menu button:hover {
     background-color: #00ff99;
     color: #000;
+    box-shadow: 0 0 10px #00ff99;
+  }
+
+  .menu button.active {
+    background-color: #00ff99;
+    color: #000;
+    box-shadow: 0 0 10px #00ff99;
   }
 
   .signature {
@@ -53,6 +64,7 @@
     text-align: center;
     color: #00ff99;
     opacity: 0.8;
+    animation: fadeIn 1.5s ease;
   }
 
   /* İçerik Alanı */
@@ -62,7 +74,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding-top: 50px;
+    padding-top: 60px;
+    animation: fadeIn 1s ease;
+    overflow-y: auto;
   }
 
   .search-box {
@@ -74,6 +88,7 @@
     color: #00ff99;
     font-size: 16px;
     outline: none;
+    text-align: center;
   }
 
   .container {
@@ -81,6 +96,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    animation: fadeIn 0.6s ease;
   }
 
   .card {
@@ -91,7 +107,9 @@
     margin: 15px;
     width: 280px;
     box-shadow: 0 0 10px #00ff99;
-    transition: transform 0.3s;
+    transition: transform 0.3s, opacity 0.4s;
+    opacity: 0;
+    animation: fadeInCard 0.6s forwards;
   }
 
   .card:hover {
@@ -101,6 +119,35 @@
   .field span {
     color: #00ff99;
     font-weight: bold;
+  }
+
+  /* Animasyonlar */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInCard {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @media(max-width: 768px) {
+    body {
+      flex-direction: column;
+    }
+    .sidebar {
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-around;
+      box-shadow: none;
+    }
+    .menu {
+      flex-direction: row;
+    }
+    .content {
+      padding-top: 30px;
+    }
   }
 </style>
 </head>
@@ -122,46 +169,11 @@
 
 <script>
   const characters = [
-    {
-      ad: "Mahmut Demir",
-      anne: "Ayşe Demir",
-      baba: "Emin Demir",
-      kardes: "Mehmet Demir",
-      aile: "4 kişilik çekirdek aile",
-      adres: "Kahramanmaraş, Afşin"
-    },
-    {
-      ad: "Elif Kaya",
-      anne: "Meral Kaya",
-      baba: "Ahmet Kaya",
-      kardes: "Can Kaya",
-      aile: "Müzik tutkunu bir aile",
-      adres: "İzmir, Bornova"
-    },
-    {
-      ad: "Hasan Arslan",
-      anne: "Fatma Arslan",
-      baba: "Selim Arslan",
-      kardes: "Zeynep Arslan",
-      aile: "Sporu seven bir aile",
-      adres: "Ankara, Çankaya"
-    },
-    {
-      ad: "Zeynep Yıldız",
-      anne: "Ayla Yıldız",
-      baba: "Osman Yıldız",
-      kardes: "Murat Yıldız",
-      aile: "Sanatla iç içe bir aile",
-      adres: "İstanbul, Kadıköy"
-    },
-    {
-      ad: "Ali Çetin",
-      anne: "Gül Çetin",
-      baba: "Hüseyin Çetin",
-      kardes: "Selin Çetin",
-      aile: "Doğa yürüyüşlerini seven bir aile",
-      adres: "Antalya, Konyaaltı"
-    }
+    { ad: "Mahmut Demir", anne: "Ayşe Demir", baba: "Emin Demir", kardes: "Mehmet Demir", aile: "4 kişilik çekirdek aile", adres: "Kahramanmaraş, Afşin" },
+    { ad: "Elif Kaya", anne: "Meral Kaya", baba: "Ahmet Kaya", kardes: "Can Kaya", aile: "Müzik tutkunu bir aile", adres: "İzmir, Bornova" },
+    { ad: "Hasan Arslan", anne: "Fatma Arslan", baba: "Selim Arslan", kardes: "Zeynep Arslan", aile: "Sporu seven bir aile", adres: "Ankara, Çankaya" },
+    { ad: "Zeynep Yıldız", anne: "Ayla Yıldız", baba: "Osman Yıldız", kardes: "Murat Yıldız", aile: "Sanatla iç içe bir aile", adres: "İstanbul, Kadıköy" },
+    { ad: "Ali Çetin", anne: "Gül Çetin", baba: "Hüseyin Çetin", kardes: "Selin Çetin", aile: "Doğa yürüyüşlerini seven bir aile", adres: "Antalya, Konyaaltı" }
   ];
 
   const container = document.getElementById("cardContainer");
@@ -170,22 +182,23 @@
 
   let currentType = "ad";
 
-  // Menü tıklama
+  // Menü tıklama efekti
   buttons.forEach(btn => {
     btn.addEventListener("click", () => {
       buttons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       currentType = btn.dataset.type;
-      container.innerHTML = ""; // Sonuçları temizle
+      container.innerHTML = "";
       searchInput.value = "";
       searchInput.placeholder = `${btn.innerText} için yaz...`;
+      document.querySelector(".content").style.animation = "fadeIn 0.6s ease";
     });
   });
 
   // Arama
   searchInput.addEventListener("input", () => {
-    const query = searchInput.value.toLowerCase();
-    if (query === "") {
+    const query = searchInput.value.toLowerCase().trim();
+    if (!query) {
       container.innerHTML = "";
       return;
     }
@@ -194,7 +207,7 @@
     if (currentType === "ad") {
       filtered = characters.filter(c => c.ad.toLowerCase().includes(query));
     } else if (currentType === "aile") {
-      filtered = characters.filter(c => 
+      filtered = characters.filter(c =>
         c.anne.toLowerCase().includes(query) ||
         c.baba.toLowerCase().includes(query) ||
         c.kardes.toLowerCase().includes(query)
@@ -208,6 +221,11 @@
 
   function displayCharacters(list) {
     container.innerHTML = "";
+    if (list.length === 0) {
+      container.innerHTML = "<p>Sonuç bulunamadı...</p>";
+      return;
+    }
+
     list.forEach(person => {
       const card = document.createElement("div");
       card.classList.add("card");
