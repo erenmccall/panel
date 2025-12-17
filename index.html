@@ -3,151 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kurgusal Bilgi Paneli</title>
+<title>Bilgi Paneli</title>
 <style>
   body {
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #6dd5fa, #ffffff);
     margin: 0;
     padding: 0;
+    font-family: 'Consolas', monospace;
+    color: #00ff99;
+    background: url('https://i.gifer.com/7VQh.gif') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    height: 100vh;
+  }
+
+  /* Sol Menü */
+  .sidebar {
+    width: 220px;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 10px;
+  }
+
+  .menu {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .menu button {
+    background: none;
+    border: 1px solid #00ff99;
+    color: #00ff99;
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .menu button:hover, .menu button.active {
+    background-color: #00ff99;
+    color: #000;
+  }
+
+  .signature {
+    font-size: 13px;
+    text-align: center;
+    color: #00ff99;
+    opacity: 0.8;
+  }
+
+  /* İçerik Alanı */
+  .content {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-
-  h1 {
-    color: #004466;
-    margin-top: 30px;
+    justify-content: flex-start;
+    padding-top: 50px;
   }
 
   .search-box {
-    margin: 20px;
-    padding: 10px 20px;
     width: 300px;
-    border-radius: 8px;
-    border: 1px solid #004466;
+    padding: 10px;
+    border: 1px solid #00ff99;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #00ff99;
     font-size: 16px;
     outline: none;
   }
 
-  .card {
-    background-color: #ffffffd9;
-    width: 320px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-    padding: 20px;
-    margin: 15px;
-    transition: 0.3s;
-  }
-
-  .card:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 6px 15px rgba(0,0,0,0.2);
-  }
-
   .container {
+    margin-top: 40px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
   }
 
-  .field {
-    margin-bottom: 8px;
+  .card {
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 1px solid #00ff99;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px;
+    width: 280px;
+    box-shadow: 0 0 10px #00ff99;
+    transition: transform 0.3s;
   }
 
-  .field span {
-    font-weight: bold;
-    color: #004466;
-  }
-
-</style>
-</head>
-<body>
-
-<h1>Kurgusal Bilgi Paneli</h1>
-<input type="text" class="search-box" id="searchInput" placeholder="Ad Soyad ile ara...">
-
-<div class="container" id="cardContainer">
-  <!-- Kartlar burada oluşturulacak -->
-</div>
-
-<script>
-  const characters = [
-    {
-      ad: "Mahmut Demir",
-      anne: "Ayşe Demir",
-      baba: "Emin Demir",
-      kardes: "Mehmet Demir",
-      aile: "4 kişilik çekirdek aile",
-      adres: "Kahramanmaraş, Afşin"
-    },
-    {
-      ad: "Elif Kaya",
-      anne: "Meral Kaya",
-      baba: "Ahmet Kaya",
-      kardes: "Can Kaya",
-      aile: "Müzik tutkunu bir aile",
-      adres: "İzmir, Bornova"
-    },
-    {
-      ad: "Hasan Arslan",
-      anne: "Fatma Arslan",
-      baba: "Selim Arslan",
-      kardes: "Zeynep Arslan",
-      aile: "Sporu seven bir aile",
-      adres: "Ankara, Çankaya"
-    },
-    {
-      ad: "Zeynep Yıldız",
-      anne: "Ayla Yıldız",
-      baba: "Osman Yıldız",
-      kardes: "Murat Yıldız",
-      aile: "Sanatla iç içe bir aile",
-      adres: "İstanbul, Kadıköy"
-    },
-    {
-      ad: "Ali Çetin",
-      anne: "Gül Çetin",
-      baba: "Hüseyin Çetin",
-      kardes: "Selin Çetin",
-      aile: "Doğa yürüyüşlerini seven bir aile",
-      adres: "Antalya, Konyaaltı"
-    }
-  ];
-
-  const container = document.getElementById("cardContainer");
-  const searchInput = document.getElementById("searchInput");
-
-  function displayCharacters(list) {
-    container.innerHTML = "";
-    list.forEach(person => {
-      const card = document.createElement("div");
-      card.classList.add("card");
-      card.innerHTML = `
-        <div class="field"><span>Ad Soyad:</span> ${person.ad}</div>
-        <div class="field"><span>Anne Adı:</span> ${person.anne}</div>
-        <div class="field"><span>Baba Adı:</span> ${person.baba}</div>
-        <div class="field"><span>Kardeşi:</span> ${person.kardes}</div>
-        <div class="field"><span>Ailevi Bilgiler:</span> ${person.aile}</div>
-        <div class="field"><span>Adresi:</span> ${person.adres}</div>
-      `;
-      container.appendChild(card);
-    });
-  }
-
-  function filterCharacters() {
-    const query = searchInput.value.toLowerCase();
-    const filtered = characters.filter(c =>
-      c.ad.toLowerCase().includes(query)
-    );
-    displayCharacters(filtered);
-  }
-
-  searchInput.addEventListener("input", filterCharacters);
-
-  // İlk yüklemede tüm karakterleri göster
-  displayCharacters(characters);
-</script>
-
-</body>
-</html>
+  .card:hover {
+    transform:
