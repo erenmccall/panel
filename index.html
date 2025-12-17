@@ -1,176 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Welcome Eren</title>
 <style>
-  body {
-    margin: 0;
-    background: black;
-    color: #00ff99;
-    font-family: "Courier New", monospace;
-    overflow: hidden;
-  }
+body {
+  margin: 0;
+  background: black;
+  color: #00ff99;
+  font-family: 'Courier New', monospace;
+  overflow: hidden;
+}
 
-  /* LOADING */
-  #loadingScreen {
-    position: fixed;
-    inset: 0;
-    background: black;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-    animation: fadeOut 2s ease 5s forwards;
-  }
-  #loadingText {
-    font-size: 22px;
-    letter-spacing: 2px;
-    animation: blink 1s infinite;
-  }
-  #welcomeText {
-    font-size: 28px;
-    opacity: 0;
-    animation: fadeIn 2s ease 3s forwards, blink 2s infinite 5s;
-  }
+/* ===== LOADING SCREEN ===== */
+#loadingScreen {
+  position: fixed;
+  inset: 0;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  transition: opacity 1.5s ease;
+}
+#loadingText {
+  font-size: 22px;
+  letter-spacing: 2px;
+  animation: blink 1s infinite;
+}
+#welcomeText {
+  font-size: 28px;
+  opacity: 0;
+  margin-top: 15px;
+  animation: fadeIn 2s ease 2s forwards, blink 2s infinite 4s;
+}
 
-  /* MATRIX BACKGROUND */
-  canvas {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-  }
+/* ===== MATRIX BACKGROUND ===== */
+canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
 
-  /* TERMINAL */
-  #terminal {
-    opacity: 0;
-    animation: fadeIn 2s ease 6s forwards;
-    padding: 20px;
-  }
-  h1 {
-    border-bottom: 1px solid #00ff99;
-    padding-bottom: 10px;
-  }
-  .output {
-    margin-top: 20px;
-    font-size: 15px;
-    color: #00ff99;
-    height: 200px;
-    overflow-y: auto;
-    border-top: 1px solid #00ff99;
-    padding-top: 10px;
-  }
+/* ===== TERMINAL ===== */
+#terminal {
+  opacity: 0;
+  transition: opacity 1.5s ease;
+  padding: 20px;
+}
+h1 {
+  border-bottom: 1px solid #00ff99;
+  padding-bottom: 10px;
+}
+.output {
+  margin-top: 20px;
+  font-size: 15px;
+  color: #00ff99;
+  height: 200px;
+  overflow-y: auto;
+  border-top: 1px solid #00ff99;
+  padding-top: 10px;
+}
 
-  /* ANIMATIONS */
-  @keyframes blink {
-    50% {
-      opacity: 0;
-    }
-  }
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  @keyframes fadeOut {
-    to {
-      opacity: 0;
-      visibility: hidden;
-    }
-  }
+/* ===== ANIMATIONS ===== */
+@keyframes blink {50%{opacity:0;}}
+@keyframes fadeIn {from{opacity:0;}to{opacity:1;}}
 </style>
 </head>
 <body>
-  <!-- Loading Screen -->
-  <div id="loadingScreen">
-    <div id="loadingText">System Initializing...</div>
-    <div id="welcomeText">Welcome Eren</div>
-  </div>
 
-  <!-- Matrix Canvas -->
-  <canvas id="matrix"></canvas>
+<!-- Loading -->
+<div id="loadingScreen">
+  <div id="loadingText">System Initializing...</div>
+  <div id="welcomeText">Welcome Eren</div>
+</div>
 
-  <!-- Terminal -->
-  <div id="terminal">
-    <h1>System Access Console</h1>
-    <div class="output" id="output"></div>
-  </div>
+<!-- Matrix Canvas -->
+<canvas id="matrix"></canvas>
 
-  <script>
-    /* MATRIX BACKGROUND */
-    const canvas = document.getElementById("matrix");
-    const ctx = canvas.getContext("2d");
+<!-- Terminal -->
+<div id="terminal">
+  <h1>System Access Console</h1>
+  <div class="output" id="output"></div>
+</div>
 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+<script>
+/* ===== MATRIX BACKGROUND ===== */
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const fontSize = 16;
+let columns = Math.floor(canvas.width / fontSize);
+let drops = Array(columns).fill(1);
+
+function drawMatrix() {
+  ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#00ff99";
+  ctx.font = fontSize + "px monospace";
+  drops.forEach((y, i) => {
+    const text = letters.charAt(Math.floor(Math.random() * letters.length));
+    ctx.fillText(text, i * fontSize, y * fontSize);
+    if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  });
+}
+let matrixInterval = setInterval(drawMatrix, 35);
+
+window.addEventListener("resize", () => {
+  clearInterval(matrixInterval);
+  resizeCanvas();
+  columns = Math.floor(canvas.width / fontSize);
+  drops = Array(columns).fill(1);
+  matrixInterval = setInterval(drawMatrix, 35);
+});
+
+/* ===== TERMINAL EFFECT ===== */
+const output = document.getElementById("output");
+const loadingScreen = document.getElementById("loadingScreen");
+const terminal = document.getElementById("terminal");
+const lines = [
+  "Access sequence started...",
+  "Establishing secure connection...",
+  "Connection stable.",
+  "Loading terminal environment...",
+  "Welcome Eren."
+];
+let line = 0, char = 0;
+
+function typeLine() {
+  if (line < lines.length) {
+    if (char < lines[line].length) {
+      output.innerHTML += ">" + lines[line][char++];
+    } else {
+      output.innerHTML += "<br/>";
+      line++;
+      char = 0;
+      setTimeout(typeLine, 500);
+      return;
     }
-    resizeCanvas();
+    setTimeout(typeLine, 40);
+  }
+}
 
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const fontSize = 16;
-    let columns = Math.floor(canvas.width / fontSize);
-    let drops = Array(columns).fill(1);
+/* ===== FIXED LOAD SEQUENCE ===== */
+window.addEventListener("load", () => {
+  // 5 saniye sonra loading ekranı kaldır
+  setTimeout(() => {
+    loadingScreen.style.opacity = 0;
+    setTimeout(() => {
+      loadingScreen.style.display = "none";
+      terminal.style.opacity = 1;
+      typeLine();
+    }, 1500);
+  }, 5000);
+});
+</script>
 
-    function drawMatrix() {
-      ctx.fillStyle = "rgba(0,0,0,0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#00ff99";
-      ctx.font = fontSize + "px monospace";
-      drops.forEach((y, i) => {
-        const text = letters[Math.floor(Math.random() * letters.length)];
-        ctx.fillText(text, i * fontSize, y * fontSize);
-        if (y * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
-      });
-    }
-    let matrixInterval = setInterval(drawMatrix, 35);
-
-    window.addEventListener("resize", () => {
-      clearInterval(matrixInterval);
-      resizeCanvas();
-      columns = Math.floor(canvas.width / fontSize);
-      drops = Array(columns).fill(1);
-      matrixInterval = setInterval(drawMatrix, 35);
-    });
-
-    /* TERMINAL TYPING EFFECT */
-    const output = document.getElementById("output");
-    const lines = [
-      "Access sequence started...",
-      "Establishing secure connection...",
-      "Connection stable.",
-      "Loading terminal environment...",
-      "Welcome Eren."
-    ];
-    let line = 0;
-    let char = 0;
-
-    function typeLine() {
-      if (line < lines.length) {
-        if (char < lines[line].length) {
-          output.innerHTML += ">" + lines[line][char++];
-        } else {
-          output.innerHTML += "<br/>";
-          line++;
-          char = 0;
-          setTimeout(typeLine, 500);
-          return;
-        }
-        setTimeout(typeLine, 40);
-      }
-    }
-
-    setTimeout(typeLine, 6500);
-  </script>
 </body>
 </html>
