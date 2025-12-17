@@ -95,4 +95,134 @@
   }
 
   .card:hover {
-    transform:
+    transform: scale(1.05);
+  }
+
+  .field span {
+    color: #00ff99;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="menu">
+    <button class="active" data-type="ad">Ad Soyad Sorgu</button>
+    <button data-type="aile">Aile Sorgu</button>
+    <button data-type="adres">Adres Sorgu</button>
+  </div>
+  <div class="signature">made by eren mccall</div>
+</div>
+
+<div class="content">
+  <input type="text" class="search-box" id="searchInput" placeholder="Aramak için yaz...">
+  <div class="container" id="cardContainer"></div>
+</div>
+
+<script>
+  const characters = [
+    {
+      ad: "Mahmut Demir",
+      anne: "Ayşe Demir",
+      baba: "Emin Demir",
+      kardes: "Mehmet Demir",
+      aile: "4 kişilik çekirdek aile",
+      adres: "Kahramanmaraş, Afşin"
+    },
+    {
+      ad: "Elif Kaya",
+      anne: "Meral Kaya",
+      baba: "Ahmet Kaya",
+      kardes: "Can Kaya",
+      aile: "Müzik tutkunu bir aile",
+      adres: "İzmir, Bornova"
+    },
+    {
+      ad: "Hasan Arslan",
+      anne: "Fatma Arslan",
+      baba: "Selim Arslan",
+      kardes: "Zeynep Arslan",
+      aile: "Sporu seven bir aile",
+      adres: "Ankara, Çankaya"
+    },
+    {
+      ad: "Zeynep Yıldız",
+      anne: "Ayla Yıldız",
+      baba: "Osman Yıldız",
+      kardes: "Murat Yıldız",
+      aile: "Sanatla iç içe bir aile",
+      adres: "İstanbul, Kadıköy"
+    },
+    {
+      ad: "Ali Çetin",
+      anne: "Gül Çetin",
+      baba: "Hüseyin Çetin",
+      kardes: "Selin Çetin",
+      aile: "Doğa yürüyüşlerini seven bir aile",
+      adres: "Antalya, Konyaaltı"
+    }
+  ];
+
+  const container = document.getElementById("cardContainer");
+  const searchInput = document.getElementById("searchInput");
+  const buttons = document.querySelectorAll(".menu button");
+
+  let currentType = "ad";
+
+  // Menü tıklama
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      buttons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentType = btn.dataset.type;
+      container.innerHTML = ""; // Sonuçları temizle
+      searchInput.value = "";
+      searchInput.placeholder = `${btn.innerText} için yaz...`;
+    });
+  });
+
+  // Arama
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    if (query === "") {
+      container.innerHTML = "";
+      return;
+    }
+
+    let filtered = [];
+    if (currentType === "ad") {
+      filtered = characters.filter(c => c.ad.toLowerCase().includes(query));
+    } else if (currentType === "aile") {
+      filtered = characters.filter(c => 
+        c.anne.toLowerCase().includes(query) ||
+        c.baba.toLowerCase().includes(query) ||
+        c.kardes.toLowerCase().includes(query)
+      );
+    } else if (currentType === "adres") {
+      filtered = characters.filter(c => c.adres.toLowerCase().includes(query));
+    }
+
+    displayCharacters(filtered);
+  });
+
+  function displayCharacters(list) {
+    container.innerHTML = "";
+    list.forEach(person => {
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.innerHTML = `
+        <div class="field"><span>Ad Soyad:</span> ${person.ad}</div>
+        <div class="field"><span>Anne:</span> ${person.anne}</div>
+        <div class="field"><span>Baba:</span> ${person.baba}</div>
+        <div class="field"><span>Kardeş:</span> ${person.kardes}</div>
+        <div class="field"><span>Aile:</span> ${person.aile}</div>
+        <div class="field"><span>Adres:</span> ${person.adres}</div>
+      `;
+      container.appendChild(card);
+    });
+  }
+</script>
+
+</body>
+</html>
