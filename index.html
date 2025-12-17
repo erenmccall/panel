@@ -5,28 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bilgi Paneli</title>
 <style>
+  /* GENEL AYARLAR */
   body {
     margin: 0;
     padding: 0;
     font-family: 'Consolas', monospace;
     color: #00ff99;
-    background: url('https://i.gifer.com/VgX.gif') no-repeat center center fixed;
+    background: #000 url('https://i.makeagif.com/media/5-20-2018/iS2N04.gif') no-repeat center center fixed;
     background-size: cover;
     display: flex;
     height: 100vh;
     overflow: hidden;
   }
 
-  /* Sol Menü */
+  /* SOL MENÜ */
   .sidebar {
     width: 220px;
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: rgba(0, 0, 0, 0.88);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 20px 10px;
-    box-shadow: 2px 0 10px #00ff99;
-    transition: background 0.5s ease;
+    box-shadow: 2px 0 15px rgba(0, 255, 100, 0.5);
+    z-index: 2;
   }
 
   .menu {
@@ -64,10 +65,10 @@
     text-align: center;
     color: #00ff99;
     opacity: 0.8;
-    animation: fadeIn 1.5s ease;
+    margin-top: 20px;
   }
 
-  /* İçerik Alanı */
+  /* ANA İÇERİK ALANI */
   .content {
     flex: 1;
     display: flex;
@@ -75,13 +76,13 @@
     align-items: center;
     justify-content: flex-start;
     padding-top: 60px;
-    animation: fadeIn 1s ease;
     overflow-y: auto;
+    animation: fadeIn 1s ease;
   }
 
   .search-box {
-    width: 300px;
-    padding: 10px;
+    width: 320px;
+    padding: 12px;
     border: 1px solid #00ff99;
     border-radius: 5px;
     background: rgba(0, 0, 0, 0.7);
@@ -89,6 +90,11 @@
     font-size: 16px;
     outline: none;
     text-align: center;
+    transition: box-shadow 0.3s;
+  }
+
+  .search-box:focus {
+    box-shadow: 0 0 10px #00ff99;
   }
 
   .container {
@@ -96,7 +102,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    animation: fadeIn 0.6s ease;
+    padding-bottom: 60px;
   }
 
   .card {
@@ -107,9 +113,8 @@
     margin: 15px;
     width: 280px;
     box-shadow: 0 0 10px #00ff99;
-    transition: transform 0.3s, opacity 0.4s;
-    opacity: 0;
-    animation: fadeInCard 0.6s forwards;
+    transition: transform 0.3s ease, opacity 0.4s ease;
+    animation: fadeInCard 0.5s forwards;
   }
 
   .card:hover {
@@ -121,17 +126,18 @@
     font-weight: bold;
   }
 
-  /* Animasyonlar */
+  /* ANİMASYONLAR */
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes fadeInCard {
-    from { opacity: 0; transform: scale(0.9); }
+    from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
   }
 
+  /* MOBİL UYUMLULUK */
   @media(max-width: 768px) {
     body {
       flex-direction: column;
@@ -140,19 +146,25 @@
       width: 100%;
       flex-direction: row;
       justify-content: space-around;
+      align-items: center;
+      padding: 10px;
       box-shadow: none;
     }
     .menu {
       flex-direction: row;
     }
     .content {
-      padding-top: 30px;
+      padding-top: 20px;
+    }
+    .search-box {
+      width: 90%;
     }
   }
 </style>
 </head>
 <body>
 
+<!-- SOL MENÜ -->
 <div class="sidebar">
   <div class="menu">
     <button class="active" data-type="ad">Ad Soyad Sorgu</button>
@@ -162,6 +174,7 @@
   <div class="signature">made by eren mccall</div>
 </div>
 
+<!-- ANA ALAN -->
 <div class="content">
   <input type="text" class="search-box" id="searchInput" placeholder="Aramak için yaz...">
   <div class="container" id="cardContainer"></div>
@@ -179,10 +192,9 @@
   const container = document.getElementById("cardContainer");
   const searchInput = document.getElementById("searchInput");
   const buttons = document.querySelectorAll(".menu button");
-
   let currentType = "ad";
 
-  // Menü tıklama efekti
+  // Menü tıklama
   buttons.forEach(btn => {
     btn.addEventListener("click", () => {
       buttons.forEach(b => b.classList.remove("active"));
@@ -191,7 +203,6 @@
       container.innerHTML = "";
       searchInput.value = "";
       searchInput.placeholder = `${btn.innerText} için yaz...`;
-      document.querySelector(".content").style.animation = "fadeIn 0.6s ease";
     });
   });
 
@@ -235,12 +246,4 @@
         <div class="field"><span>Baba:</span> ${person.baba}</div>
         <div class="field"><span>Kardeş:</span> ${person.kardes}</div>
         <div class="field"><span>Aile:</span> ${person.aile}</div>
-        <div class="field"><span>Adres:</span> ${person.adres}</div>
-      `;
-      container.appendChild(card);
-    });
-  }
-</script>
-
-</body>
-</html>
+        <div clas
